@@ -30,6 +30,9 @@ func Command(b *game.Board, key rune) {
 			x++
 		}
 	case 'e':
+		if b.Point[x][y].State != game.Empty {
+			break
+		}
 		b.SetPiece(x, y, b.GetPiece())
 		b.Finish = b.CheckWin()
 		b.ChangeTurn()
