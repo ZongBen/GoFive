@@ -1,12 +1,18 @@
 package main
 
 import (
-	"fmt"
+	"github.com/ZongBen/GoFive/pkg/display"
 
-	"GoFive/pkg/board"
+	"github.com/ZongBen/GoFive/pkg/control"
+	"github.com/ZongBen/GoFive/pkg/game"
 )
 
 func main() {
-	b := board.CreateBoard()
-	fmt.Println(b)
+	b := game.CreateBoard()
+	display.RenderBoard(&b)
+	for !b.Finish {
+		key := control.ReadKey()
+		control.Command(&b, key)
+		display.RenderBoard(&b)
+	}
 }
