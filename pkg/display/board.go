@@ -19,10 +19,9 @@ func RenderBoard(b *game.Board) {
 	} else {
 		Turn = "White"
 	}
-	ClearScreen(buffer)
+	buffer.WriteString("\033[2J")
 	board += "Welcome to GoFive!\n"
 	board += "Use 'w', 'a', 's', 'd' to move the cursor and 'e' to place a piece.\n"
-	board += "Black goes first.\n"
 	board += "Press 'q' to quit.\n"
 	board += "Turn: " + Turn + "\n"
 	for y := 0; y < b.Max_y; y++ {
@@ -55,16 +54,6 @@ func renderSwitcher(b *game.Board, x, y, part int) {
 	case game.White:
 		renderWhite(part, isSelected)
 		break
-	}
-}
-
-func renderSelector(part int) {
-	if part == 0 {
-		board += "┏     ┓"
-	} else if part == 1 {
-		board += "┃     ┃"
-	} else {
-		board += "┗     ┛"
 	}
 }
 
