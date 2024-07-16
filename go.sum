@@ -1,3 +1,5 @@
+github.com/ZongBen/tanvas v0.0.0-20240716095922-77809eb1e279 h1:X1xecZnN6IryWTjANWC7A1Gtu0S9LaLdvh+/SvGuIT4=
+github.com/ZongBen/tanvas v0.0.0-20240716095922-77809eb1e279/go.mod h1:csu4FwRoy9Z5yeFK0jqX/EuOwUqAnQHhLOCr9/42Oco=
 github.com/eiannone/keyboard v0.0.0-20220611211555-0d226195f203 h1:XBBHcIb256gUJtLmY22n99HaZTz+r2Z51xUPi01m3wg=
 github.com/eiannone/keyboard v0.0.0-20220611211555-0d226195f203/go.mod h1:E1jcSv8FaEny+OP/5k9UxZVw9YFWGj7eI4KR/iOBqCg=
 golang.org/x/sys v0.22.0 h1:RI27ohtqKCnwULzJLqkv897zojh5/DwS/ENaMzUOaWI=
