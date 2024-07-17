@@ -21,7 +21,6 @@ func init() {
 }
 
 func RenderHome(homeMenu menu.IHomeMenu) string {
-	title := renderTitle()
 	result := title + renderMenu(homeMenu)
 	return result
 }
@@ -47,7 +46,6 @@ func renderTitle() string {
 }
 
 func renderMenu(m menu.IHomeMenu) string {
-	_menuSection.Clear()
 	menu :=
 		`
   1. Local  Game
@@ -57,6 +55,8 @@ func renderMenu(m menu.IHomeMenu) string {
 	for i, line := range lines {
 		if i == m.GetMenuSelect()+1 {
 			line += " <=="
+		} else {
+			line += "    "
 		}
 		_menuSection.SetRow(6, i, line)
 	}
