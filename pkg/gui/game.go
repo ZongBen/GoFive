@@ -11,47 +11,46 @@ var board = ""
 var Turn = ""
 var buffer = new(bytes.Buffer)
 
-func RenderBoard(b *game.Board) {
+func RenderBoard(b game.Board) {
 	board = ""
 	buffer.Reset()
-	if b.Turn {
+	if b.GetTurn() {
 		Turn = "Black"
 	} else {
 		Turn = "White"
 	}
-	buffer.WriteString("\033[2J")
 	board += "Welcome to GoFive!\n"
 	board += "Use 'w', 'a', 's', 'd' to move the cursor and 'e' to place a piece.\n"
 	board += "Press 'q' to quit.\n"
 	board += "Turn: " + Turn + "\n"
-	for y := 0; y < b.Max_y; y++ {
+	for y := 0; y < b.GetHeight(); y++ {
 		renderLine(b, y)
 	}
 	buffer.WriteString(board)
 	fmt.Print(buffer.String())
 }
 
-func renderLine(b *game.Board, row int) {
+func renderLine(b game.Board, row int) {
 	for part := 0; part < 3; part++ {
-		for col := 0; col < b.Max_x; col++ {
+		for col := 0; col < b.GetWidth(); col++ {
 			renderSwitcher(b, col, row, part)
 		}
 		board += "\n"
 	}
 }
 
-func renderSwitcher(b *game.Board, x, y, part int) {
-	piece := b.Point[x][y]
+func renderSwitcher(b game.Board, x, y, part int) {
+	piece := b.GetPoint(x, y)
 	select_x, select_y := b.GetSelectorPosition()
 	isSelected := x == select_x && y == select_y
 	switch piece.State {
-	case game.Empty:
+	case game.EMPTY:
 		renderPosition(part, isSelected)
 		break
-	case game.Black:
+	case game.BLACK:
 		renderBlack(part, isSelected)
 		break
-	case game.White:
+	case game.WHITE:
 		renderWhite(part, isSelected)
 		break
 	}

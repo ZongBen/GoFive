@@ -1,119 +1,155 @@
 package game
 
 const (
-	Empty = iota
-	Black
-	White
+	EMPTY = iota
+	BLACK
+	WHITE
 )
 
-type Board struct {
-	Turn             bool // true: Black, false: White
-	Point            [18][18]piece
-	Max_x            int
-	Max_y            int
-	selectorPosition [1][2]int
-	Finish           bool
+type Board interface {
+	GetWidth() int
+	GetHeight() int
+	GetSelectorPosition() (int, int)
+	SetSelectorPosition(x, y int)
+	SetPiece(x, y int, piece piece)
+	Quit()
+	GetPiece() piece
+	IsFinish() bool
+	GetPoint(x, y int) piece
+	ChangeTurn()
+	CheckWin()
+	GetTurn() bool
+}
+
+type board struct {
+	turn             bool // true: Black, false: White
+	point            [18][18]piece
+	max_x            int
+	max_y            int
+	selectorPosition [2]int
+	finish           bool
 }
 
 type piece struct {
 	State int
 }
 
-func CreateBoard() Board {
-	return Board{Max_x: 18, Max_y: 18, selectorPosition: [1][2]int{{9, 9}}}
+func CreateBoard() board {
+	return board{max_x: 18, max_y: 18, selectorPosition: [2]int{9, 9}}
 }
 
-func (b *Board) GetSelectorPosition() (int, int) {
-	return b.selectorPosition[0][0], b.selectorPosition[0][1]
+func (b *board) GetTurn() bool {
+	return b.turn
 }
 
-func (b *Board) SetSelectorPosition(x, y int) {
-	b.selectorPosition[0][0] = x
-	b.selectorPosition[0][1] = y
+func (b *board) GetWidth() int {
+	return b.max_x
 }
 
-func (b *Board) SetPiece(x, y int, piece piece) {
-	b.Point[x][y] = piece
+func (b *board) GetHeight() int {
+	return b.max_y
 }
 
-func (b *Board) Quit() {
-	b.Finish = true
+func (b *board) GetSelectorPosition() (int, int) {
+	return b.selectorPosition[0], b.selectorPosition[1]
 }
 
-func (b *Board) GetPiece() piece {
-	state := Empty
-	if b.Turn {
-		state = Black
+func (b *board) SetSelectorPosition(x, y int) {
+	b.selectorPosition[0] = x
+	b.selectorPosition[1] = y
+}
+
+func (b *board) SetPiece(x, y int, piece piece) {
+	b.point[y][x] = piece
+}
+
+func (b *board) Quit() {
+	b.finish = true
+}
+
+func (b *board) GetPiece() piece {
+	state := EMPTY
+	if b.turn {
+		state = BLACK
 	} else {
-		state = White
+		state = WHITE
 	}
 	return piece{state}
 }
 
-func (b *Board) ChangeTurn() {
-	b.Turn = !b.Turn
+func (b *board) IsFinish() bool {
+	return b.finish
 }
 
-func (b *Board) CheckWin() bool {
-	for x := 0; x < b.Max_x; x++ {
-		for y := 0; y < b.Max_y; y++ {
-			if b.Point[x][y].State == Empty {
+func (b *board) GetPoint(x, y int) piece {
+	return b.point[y][x]
+}
+
+func (b *board) ChangeTurn() {
+	b.turn = !b.turn
+}
+
+func (b *board) CheckWin() {
+	for y := 0; y < b.max_y; y++ {
+		for x := 0; x < b.max_x; x++ {
+			if b.point[y][x].State == EMPTY {
 				continue
 			}
 			if checkRight(b, x, y) || checkDown(b, x, y) || checkRightDown(b, x, y) || checkLeftDown(b, x, y) {
-				return true
+				b.finish = true
+				return
 			}
 		}
 	}
-	return false
+	b.finish = false
 }
 
-func checkRight(b *Board, x, y int) bool {
-	state := b.Point[x][y].State
+func checkRight(b *board, x, y int) bool {
+	state := b.point[y][x].State
 	for i := 1; i < 5; i++ {
-		if x+i > b.Max_x {
+		if x+i > b.max_x {
 			return false
 		}
-		if b.Point[x+i][y].State != state {
+		if b.point[y][x+i].State != state {
 			return false
 		}
 	}
 	return true
 }
 
-func checkDown(b *Board, x, y int) bool {
-	state := b.Point[x][y].State
+func checkDown(b *board, x, y int) bool {
+	state := b.point[y][x].State
 	for i := 1; i < 5; i++ {
-		if y+i > b.Max_y {
+		if y+i > b.max_y {
 			return false
 		}
-		if b.Point[x][y+i].State != state {
+		if b.point[y+i][x].State != state {
 			return false
 		}
 	}
 	return true
 }
 
-func checkRightDown(b *Board, x, y int) bool {
-	state := b.Point[x][y].State
+func checkRightDown(b *board, x, y int) bool {
+	state := b.point[y][x].State
 	for i := 1; i < 5; i++ {
-		if x+i > b.Max_x || y+i > b.Max_y {
+		if x+i > b.max_x || y+i > b.max_y {
 			return false
 		}
-		if b.Point[x+i][y+i].State != state {
+		if b.point[y+i][x+i].State != state {
 			return false
 		}
 	}
 	return true
 }
 
-func checkLeftDown(b *Board, x, y int) bool {
-	state := b.Point[x][y].State
+func checkLeftDown(b *board, x, y int) bool {
+	state := b.point[y][x].State
 	for i := 1; i < 5; i++ {
-		if x-i < 0 || y+i > b.Max_y {
+		if x-i < 0 || y+i > b.max_y {
 			return false
 		}
-		if b.Point[x-i][y+i].State != state {
+		if b.point[y+i][x-i].State != state {
 			return false
 		}
 	}

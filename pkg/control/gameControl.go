@@ -1,16 +1,8 @@
 package control
 
-import (
-	"github.com/ZongBen/GoFive/pkg/game"
-	"github.com/eiannone/keyboard"
-)
+import "github.com/ZongBen/GoFive/pkg/game"
 
-func ReadKey() rune {
-	key, _, _ := keyboard.GetSingleKey()
-	return key
-}
-
-func Command(b *game.Board, key rune) {
+func GameCommandHandler(b game.Board, key rune) int {
 	x, y := b.GetSelectorPosition()
 	switch key {
 	case 'w':
@@ -18,7 +10,7 @@ func Command(b *game.Board, key rune) {
 			y--
 		}
 	case 's':
-		if y < b.Max_y-1 {
+		if y < b.GetHeight()-1 {
 			y++
 		}
 	case 'a':
@@ -26,18 +18,19 @@ func Command(b *game.Board, key rune) {
 			x--
 		}
 	case 'd':
-		if x < b.Max_x-1 {
+		if x < b.GetWidth()-1 {
 			x++
 		}
 	case 'e':
-		if b.Point[x][y].State != game.Empty {
+		if b.GetPoint(x, y).State != game.EMPTY {
 			break
 		}
 		b.SetPiece(x, y, b.GetPiece())
-		b.Finish = b.CheckWin()
+		b.CheckWin()
 		b.ChangeTurn()
 	case 'q':
 		b.Quit()
 	}
 	b.SetSelectorPosition(x, y)
+	return 0
 }
