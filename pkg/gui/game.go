@@ -1,123 +1,71 @@
 package gui
 
 import (
-	"bytes"
-	"fmt"
+	"sync"
 
 	"github.com/ZongBen/GoFive/pkg/game"
+	"github.com/ZongBen/tanvas"
 )
 
-var board = ""
-var Turn = ""
-var buffer = new(bytes.Buffer)
+var boardCanvas tanvas.Canvas
+var dialogSection tanvas.Section
+var instructions string
 
-func RenderBoard(b game.Board) {
-	board = ""
-	buffer.Reset()
-	if b.GetTurn() {
-		Turn = "Black"
-	} else {
-		Turn = "White"
-	}
-	board += "Welcome to GoFive!\n"
-	board += "Use 'w', 'a', 's', 'd' to move the cursor and 'e' to place a piece.\n"
-	board += "Press 'q' to quit.\n"
-	board += "Turn: " + Turn + "\n"
-	for y := 0; y < b.GetHeight(); y++ {
-		renderLine(b, y)
-	}
-	buffer.WriteString(board)
-	fmt.Print(buffer.String())
+func init() {
+	c := tanvas.CreateCanvas(18*7, 18*3, 3)
+	boardCanvas = &c
+
+	instructions = renderInstructions()
+
+	d := c.CreateSection(45, 18, 34, 8, 2)
+	d.SetDisplay(false)
+	dialogSection = &d
 }
 
-func renderLine(b game.Board, row int) {
-	for part := 0; part < 3; part++ {
-		for col := 0; col < b.GetWidth(); col++ {
-			renderSwitcher(b, col, row, part)
-		}
-		board += "\n"
-	}
+func renderInstructions() string {
+	c := tanvas.CreateCanvas(67, 5, 1)
+	s := c.CreateSection(0, 0, 67, 5, 0)
+
+	s.SetRow(0, 0, "Welcome to GoFive!")
+	s.SetRow(0, 1, "Use 'w', 'a', 's', 'd' to move the cursor and 'e' to place a piece.")
+	s.SetRow(0, 2, "Press 'q' to quit.")
+	return c.Render()
 }
 
-func renderSwitcher(b game.Board, x, y, part int) {
-	piece := b.GetPoint(x, y)
+func RenderBoard(b game.Board) string {
+	wg := new(sync.WaitGroup)
 	select_x, select_y := b.GetSelectorPosition()
-	isSelected := x == select_x && y == select_y
-	switch piece.State {
-	case game.EMPTY:
-		renderPosition(part, isSelected)
-		break
-	case game.BLACK:
-		renderBlack(part, isSelected)
-		break
-	case game.WHITE:
-		renderWhite(part, isSelected)
-		break
-	}
-}
 
-func renderPosition(part int, isSelected bool) {
-	if part == 0 {
-		if isSelected {
-			board += "┏     ┓"
-		} else {
-			board += "       "
-		}
-	} else if part == 1 {
-		if isSelected {
-			board += "┃  +  ┃"
-		} else {
-			board += "   +   "
-		}
+	if b.GetWinner() != game.EMPTY {
+		renderDialog(b.GetDialog(), b.GetWinner(), dialogSection)
+		dialogSection.SetDisplay(true)
 	} else {
-		if isSelected {
-			board += "┗     ┛"
-		} else {
-			board += "       "
-		}
+		dialogSection.SetDisplay(false)
 	}
-}
 
-func renderBlack(part int, isSelected bool) {
-	if part == 0 {
-		if isSelected {
-			board += "┏ *** ┓"
-		} else {
-			board += "  ***  "
-		}
-	} else if part == 1 {
-		if isSelected {
-			board += "┃*****┃"
-		} else {
-			board += " ***** "
-		}
-	} else {
-		if isSelected {
-			board += "┗ *** ┛"
-		} else {
-			board += "  ***  "
-		}
-	}
-}
+	for y := 0; y < b.GetHeight(); y++ {
+		wg.Add(1)
+		go func(y int) {
+			for x := 0; x < b.GetWidth(); x++ {
+				wg.Add(1)
+				go func(x, y int) {
+					s := boardCanvas.CreateSection(x*7, y*3, 7, 3, 0)
+					s1 := boardCanvas.CreateSection(x*7, y*3, 7, 3, 1)
 
-func renderWhite(part int, isSelected bool) {
-	if part == 0 {
-		if isSelected {
-			board += "┏ OOO ┓"
-		} else {
-			board += "  OOO  "
-		}
-	} else if part == 1 {
-		if isSelected {
-			board += "┃OOOOO┃"
-		} else {
-			board += " OOOOO "
-		}
-	} else {
-		if isSelected {
-			board += "┗ OOO ┛"
-		} else {
-			board += "  OOO  "
-		}
+					renderPiece(b.GetPoint(x, y).State, &s)
+
+					if x == select_x && y == select_y {
+						renderSelector(&s1)
+					} else {
+						s1.Clear()
+					}
+
+					wg.Done()
+				}(x, y)
+			}
+			wg.Done()
+		}(y)
 	}
+	wg.Wait()
+	return instructions + boardCanvas.Render()
 }

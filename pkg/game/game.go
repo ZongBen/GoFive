@@ -1,5 +1,7 @@
 package game
 
+import "github.com/ZongBen/GoFive/pkg/dialog"
+
 const (
 	EMPTY = iota
 	BLACK
@@ -19,6 +21,8 @@ type Board interface {
 	ChangeTurn()
 	CheckWin()
 	GetTurn() bool
+	GetWinner() int
+	GetDialog() dialog.IDialog
 }
 
 type board struct {
@@ -28,14 +32,25 @@ type board struct {
 	max_y            int
 	selectorPosition [2]int
 	finish           bool
+	winner           int
+	dialog           dialog.IDialog
 }
 
 type piece struct {
 	State int
 }
 
+func (b *board) GetWinner() int {
+	return b.winner
+}
+
+func (b *board) GetDialog() dialog.IDialog {
+	return b.dialog
+}
+
 func CreateBoard() board {
-	return board{max_x: 18, max_y: 18, selectorPosition: [2]int{9, 9}}
+	d := dialog.CreateDialog()
+	return board{max_x: 18, max_y: 18, selectorPosition: [2]int{9, 9}, dialog: &d}
 }
 
 func (b *board) GetTurn() bool {
@@ -96,12 +111,11 @@ func (b *board) CheckWin() {
 				continue
 			}
 			if checkRight(b, x, y) || checkDown(b, x, y) || checkRightDown(b, x, y) || checkLeftDown(b, x, y) {
-				b.finish = true
+				b.winner = b.point[y][x].State
 				return
 			}
 		}
 	}
-	b.finish = false
 }
 
 func checkRight(b *board, x, y int) bool {

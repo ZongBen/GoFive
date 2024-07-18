@@ -13,10 +13,10 @@ var title string
 
 func init() {
 	title = renderTitle()
-	menuCanvas := tanvas.CreateCanvas(44, 4, 1)
+	menuCanvas := tanvas.CreateCanvas(22, 4, 1)
 	_menuCanvas = &menuCanvas
 
-	menuSection := menuCanvas.CreateSection(8, 0, 36, 4, 0)
+	menuSection := menuCanvas.CreateSection(0, 0, 22, 4, 0)
 	_menuSection = &menuSection
 }
 
@@ -26,8 +26,8 @@ func RenderHome(homeMenu menu.IHomeMenu) string {
 }
 
 func renderTitle() string {
-	titleCanvas := tanvas.CreateCanvas(40, 7, 1)
-	titleSection := titleCanvas.CreateSection(0, 0, 40, 7, 0)
+	titleCanvas := tanvas.CreateCanvas(35, 7, 1)
+	titleSection := titleCanvas.CreateSection(0, 0, 35, 7, 0)
 	title :=
 		`
    _____       _____  _           
@@ -40,7 +40,7 @@ func renderTitle() string {
 	title = strings.Trim(title, "\n")
 	lines := strings.Split(title, "\n")
 	for i, line := range lines {
-		titleSection.SetRow(6, i, line)
+		titleSection.SetRow(0, i, line)
 	}
 	return titleCanvas.Render()
 }
@@ -58,7 +58,7 @@ func renderMenu(m menu.IHomeMenu) string {
 		} else {
 			line += "    "
 		}
-		_menuSection.SetRow(6, i, line)
+		_menuSection.SetRow(0, i, line)
 	}
 	return _menuCanvas.Render()
 }

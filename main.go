@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/ZongBen/GoFive/pkg/control"
+	"github.com/ZongBen/GoFive/pkg/dialog"
 	"github.com/ZongBen/GoFive/pkg/game"
 	"github.com/ZongBen/GoFive/pkg/gui"
 	"github.com/ZongBen/GoFive/pkg/menu"
@@ -17,7 +18,6 @@ func init() {
 }
 
 func main() {
-
 	for !_homeMenu.IsQuit() {
 		gui.Clear()
 		fmt.Println(gui.RenderHome(_homeMenu))
@@ -37,9 +37,27 @@ func StartLocalGame() {
 	var _gameBoard game.Board
 	b := game.CreateBoard()
 	_gameBoard = &b
-	for !b.IsFinish() {
+	for !_gameBoard.IsFinish() {
+		if _gameBoard.GetWinner() != 0 {
+			result := showDialog(_gameBoard)
+			if result == dialog.AGAIN {
+				StartLocalGame()
+			} else if result == dialog.QUIT {
+				_gameBoard.Quit()
+			}
+		}
 		gui.Clear()
-		gui.RenderBoard(_gameBoard)
+		fmt.Print(gui.RenderBoard(_gameBoard))
 		control.ExecuteCommand(_gameBoard, control.GameCommandHandler)
 	}
+}
+
+func showDialog(b game.Board) int {
+	state := -1
+	for state == -1 {
+		gui.Clear()
+		fmt.Print(gui.RenderBoard(b))
+		state = control.ExecuteCommand(b.GetDialog(), control.DialogCommandHandler)
+	}
+	return state
 }

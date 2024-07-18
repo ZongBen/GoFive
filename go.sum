@@ -8,6 +8,8 @@ github.com/ZongBen/tanvas v0.0.0-20240717092927-b820eb8e179c h1:ELgNBz5OVF5LcZmt
 github.com/ZongBen/tanvas v0.0.0-20240717092927-b820eb8e179c/go.mod h1:csu4FwRoy9Z5yeFK0jqX/EuOwUqAnQHhLOCr9/42Oco=
 github.com/ZongBen/tanvas v0.0.0-20240718030021-7197f4277b4d h1:+oCTI/o1RKKrda/UCQZ2svi0uMqrUoIOC0ByKl3+BPc=
 github.com/ZongBen/tanvas v0.0.0-20240718030021-7197f4277b4d/go.mod h1:csu4FwRoy9Z5yeFK0jqX/EuOwUqAnQHhLOCr9/42Oco=
+github.com/ZongBen/tanvas v0.0.0-20240718152844-e97dbed68312 h1:zgQZ3C1UTjPPr0XDUGwTX0/4CSKGIE1LZtP7sLsnqYQ=
+github.com/ZongBen/tanvas v0.0.0-20240718152844-e97dbed68312/go.mod h1:csu4FwRoy9Z5yeFK0jqX/EuOwUqAnQHhLOCr9/42Oco=
 github.com/eiannone/keyboard v0.0.0-20220611211555-0d226195f203 h1:XBBHcIb256gUJtLmY22n99HaZTz+r2Z51xUPi01m3wg=
 github.com/eiannone/keyboard v0.0.0-20220611211555-0d226195f203/go.mod h1:E1jcSv8FaEny+OP/5k9UxZVw9YFWGj7eI4KR/iOBqCg=
 golang.org/x/sys v0.22.0 h1:RI27ohtqKCnwULzJLqkv897zojh5/DwS/ENaMzUOaWI=
