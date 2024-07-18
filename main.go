@@ -42,8 +42,10 @@ func StartLocalGame() {
 			result := showDialog(_gameBoard)
 			if result == dialog.AGAIN {
 				StartLocalGame()
+				break
 			} else if result == dialog.QUIT {
 				_gameBoard.Quit()
+				break
 			}
 		}
 		gui.Clear()
