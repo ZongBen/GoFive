@@ -10,31 +10,29 @@ import (
 var _menuCanvas tanvas.Canvas
 var _menuSection tanvas.Section
 
-var _titleCanvas tanvas.Canvas
-var _titleSection tanvas.Section
+var title string
 
 func init() {
 	menuCanvas := tanvas.CreateCanvas(22, 4, 1)
+	menuCanvas.SetOffset(7, 0)
 	_menuCanvas = &menuCanvas
 
 	menuSection := menuCanvas.CreateSection(0, 0, 22, 4, 0)
 	_menuSection = &menuSection
 
-	titleCanvas := tanvas.CreateCanvas(35, 7, 1)
-	_titleCanvas = &titleCanvas
-
-	titleSection := titleCanvas.CreateSection(0, 0, 35, 7, 0)
-	_titleSection = &titleSection
+	title = renderTitle()
 }
 
 func RenderHome(homeMenu menu.IHomeMenu) string {
-	titleOffset_x, title_Offset_y := CenterOffset(35, 15)
-	_titleCanvas.SetOffset(titleOffset_x, title_Offset_y)
 	result := renderTitle() + renderMenu(homeMenu)
 	return result
 }
 
 func renderTitle() string {
+	titleCanvas := tanvas.CreateCanvas(35, 7, 1)
+	titleSection := titleCanvas.CreateSection(0, 0, 35, 7, 0)
+	_titleSection := &titleSection
+
 	title :=
 		`
    _____       _____  _           
@@ -49,12 +47,10 @@ func renderTitle() string {
 	for i, line := range lines {
 		_titleSection.SetRow(0, i, line)
 	}
-	return _titleCanvas.Render()
+	return titleCanvas.Project()
 }
 
 func renderMenu(m menu.IHomeMenu) string {
-	menuOffset_x, _ := CenterOffset(20, 4)
-	_menuCanvas.SetOffset(menuOffset_x, 0)
 	menu :=
 		`
   1. Local  Game
@@ -69,5 +65,5 @@ func renderMenu(m menu.IHomeMenu) string {
 		}
 		_menuSection.SetRow(0, i, line)
 	}
-	return _menuCanvas.Render()
+	return _menuCanvas.Project()
 }

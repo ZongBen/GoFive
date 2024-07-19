@@ -17,7 +17,7 @@ func init() {
 
 func main() {
 	for !_homeMenu.IsQuit() {
-		gui.Flush(gui.RenderHome(_homeMenu))
+		gui.Flush(34, 20, gui.RenderHome(_homeMenu), true)
 		command := control.ExecuteCommand(_homeMenu, control.HomeMenuCommandHandler)
 		switch command {
 		case control.LOCAL_GAME:
@@ -29,7 +29,6 @@ func main() {
 	}
 	gui.Clear()
 	gui.Close()
-	gui.Sync()
 }
 
 func StartLocalGame() {
@@ -47,7 +46,7 @@ func StartLocalGame() {
 				break
 			}
 		}
-		gui.Flush(gui.RenderBoard(_gameBoard))
+		gui.Flush(126, 60, gui.RenderBoard(_gameBoard), true)
 		control.ExecuteCommand(_gameBoard, control.GameCommandHandler)
 	}
 	gui.Clear()
@@ -56,7 +55,7 @@ func StartLocalGame() {
 func showDialog(b game.Board) int {
 	state := -1
 	for state == -1 {
-		gui.Flush(gui.RenderBoard(b))
+		gui.Flush(126, 60, gui.RenderBoard(b), true)
 		state = control.ExecuteCommand(b.GetDialog(), control.DialogCommandHandler)
 	}
 	return state

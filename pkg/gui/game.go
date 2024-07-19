@@ -31,8 +31,6 @@ func init() {
 }
 
 func renderInstructions(turn bool) string {
-	_instructionCanvas.SetOffset(offset_x, 0)
-
 	if turn {
 		_instructionSection.SetRow(0, 3, "Black's Turn.")
 	} else {
@@ -42,13 +40,10 @@ func renderInstructions(turn bool) string {
 	_instructionSection.SetRow(0, 0, "Welcome to GoFive!")
 	_instructionSection.SetRow(0, 1, "Use 'w', 'a', 's', 'd' to move the cursor and 'e' to place a piece.")
 	_instructionSection.SetRow(0, 2, "Press 'q' to quit.")
-	return _instructionCanvas.Render()
+	return _instructionCanvas.Project()
 }
 
 func RenderBoard(b game.Board) string {
-	size_x, _ := CenterOffset(18*7, 18*3)
-	offset_x = size_x
-	boardCanvas.SetOffset(size_x, 0)
 	wg := new(sync.WaitGroup)
 	select_x, select_y := b.GetSelectorPosition()
 
@@ -83,5 +78,5 @@ func RenderBoard(b game.Board) string {
 		}(y)
 	}
 	wg.Wait()
-	return renderInstructions(b.GetTurn()) + boardCanvas.Render()
+	return renderInstructions(b.GetTurn()) + boardCanvas.Project()
 }
