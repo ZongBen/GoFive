@@ -27,6 +27,8 @@ func main() {
 			_homeMenu.Quit()
 		}
 	}
+	gui.Clear()
+	gui.Close()
 }
 
 func StartLocalGame() {
@@ -38,7 +40,6 @@ func StartLocalGame() {
 			result := showDialog(_gameBoard)
 			if result == dialog.AGAIN {
 				StartLocalGame()
-				gui.Clear()
 				break
 			} else if result == dialog.QUIT {
 				_gameBoard.Quit()
@@ -48,6 +49,7 @@ func StartLocalGame() {
 		gui.Flush(gui.RenderBoard(_gameBoard))
 		control.ExecuteCommand(_gameBoard, control.GameCommandHandler)
 	}
+	gui.Clear()
 }
 
 func showDialog(b game.Board) int {

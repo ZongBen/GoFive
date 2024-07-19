@@ -14,6 +14,7 @@ func init() {
 }
 
 func Flush(content string) {
+	Clear()
 	wg := new(sync.WaitGroup)
 	lines := strings.Split(content, "\n")
 	for y, line := range lines {
@@ -27,8 +28,22 @@ func Flush(content string) {
 	}
 	wg.Wait()
 	termbox.Flush()
+	termbox.Sync()
 }
 
 func Clear() {
 	termbox.Clear(termbox.ColorDefault, termbox.ColorDefault)
+}
+
+func GetTSize() (int, int) {
+	return termbox.Size()
+}
+
+func CenterOffset(contentWidth int, contentHeight int) (int, int) {
+	screenWidth, screenHeight := GetTSize()
+	return max(0, (screenWidth/2)-(contentWidth/2)), max(0, (screenHeight/2)-(contentHeight/2))
+}
+
+func Close() {
+	termbox.Close()
 }

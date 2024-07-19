@@ -10,6 +10,10 @@ github.com/ZongBen/tanvas v0.0.0-20240718030021-7197f4277b4d h1:+oCTI/o1RKKrda/U
 github.com/ZongBen/tanvas v0.0.0-20240718030021-7197f4277b4d/go.mod h1:csu4FwRoy9Z5yeFK0jqX/EuOwUqAnQHhLOCr9/42Oco=
 github.com/ZongBen/tanvas v0.0.0-20240718152844-e97dbed68312 h1:zgQZ3C1UTjPPr0XDUGwTX0/4CSKGIE1LZtP7sLsnqYQ=
 github.com/ZongBen/tanvas v0.0.0-20240718152844-e97dbed68312/go.mod h1:csu4FwRoy9Z5yeFK0jqX/EuOwUqAnQHhLOCr9/42Oco=
+github.com/ZongBen/tanvas v0.0.0-20240718154141-8a8bc4c27b19 h1:wADFFnP7i3Prs3P96NfZ4EyWpUQ2Q/OJqUKff1sq5pU=
+github.com/ZongBen/tanvas v0.0.0-20240718154141-8a8bc4c27b19/go.mod h1:csu4FwRoy9Z5yeFK0jqX/EuOwUqAnQHhLOCr9/42Oco=
+github.com/ZongBen/tanvas v0.0.0-20240719082138-1ffdce7b9f40 h1:qUzVcGBkFZDwn8j6aY2yJiXY2iQiiw6GLxxReVTG2bw=
+github.com/ZongBen/tanvas v0.0.0-20240719082138-1ffdce7b9f40/go.mod h1:csu4FwRoy9Z5yeFK0jqX/EuOwUqAnQHhLOCr9/42Oco=
 github.com/eiannone/keyboard v0.0.0-20220611211555-0d226195f203 h1:XBBHcIb256gUJtLmY22n99HaZTz+r2Z51xUPi01m3wg=
 github.com/eiannone/keyboard v0.0.0-20220611211555-0d226195f203/go.mod h1:E1jcSv8FaEny+OP/5k9UxZVw9YFWGj7eI4KR/iOBqCg=
 github.com/mattn/go-runewidth v0.0.9/go.mod h1:H031xJmbD/WCDINGzjvQ9THkh0rPKHF+m2gUSrubnMI=

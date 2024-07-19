@@ -9,30 +9,46 @@ import (
 
 var boardCanvas tanvas.Canvas
 var dialogSection tanvas.Section
-var instructions string
+
+var _instructionCanvas tanvas.Canvas
+var _instructionSection tanvas.Section
+
+var offset_x int
 
 func init() {
 	c := tanvas.CreateCanvas(18*7, 18*3, 3)
 	boardCanvas = &c
 
-	instructions = renderInstructions()
-
 	d := c.CreateSection(45, 18, 34, 8, 2)
 	d.SetDisplay(false)
 	dialogSection = &d
+
+	instructionCanvas := tanvas.CreateCanvas(67, 5, 1)
+	_instructionCanvas = &instructionCanvas
+
+	instructionSection := instructionCanvas.CreateSection(0, 0, 67, 5, 0)
+	_instructionSection = &instructionSection
 }
 
-func renderInstructions() string {
-	c := tanvas.CreateCanvas(67, 5, 1)
-	s := c.CreateSection(0, 0, 67, 5, 0)
+func renderInstructions(turn bool) string {
+	_instructionCanvas.SetOffset(offset_x, 0)
 
-	s.SetRow(0, 0, "Welcome to GoFive!")
-	s.SetRow(0, 1, "Use 'w', 'a', 's', 'd' to move the cursor and 'e' to place a piece.")
-	s.SetRow(0, 2, "Press 'q' to quit.")
-	return c.Render()
+	if turn {
+		_instructionSection.SetRow(0, 3, "Black's Turn.")
+	} else {
+		_instructionSection.SetRow(0, 3, "White's Turn.")
+	}
+
+	_instructionSection.SetRow(0, 0, "Welcome to GoFive!")
+	_instructionSection.SetRow(0, 1, "Use 'w', 'a', 's', 'd' to move the cursor and 'e' to place a piece.")
+	_instructionSection.SetRow(0, 2, "Press 'q' to quit.")
+	return _instructionCanvas.Render()
 }
 
 func RenderBoard(b game.Board) string {
+	size_x, _ := CenterOffset(18*7, 18*3)
+	offset_x = size_x
+	boardCanvas.SetOffset(size_x, 0)
 	wg := new(sync.WaitGroup)
 	select_x, select_y := b.GetSelectorPosition()
 
@@ -67,5 +83,5 @@ func RenderBoard(b game.Board) string {
 		}(y)
 	}
 	wg.Wait()
-	return instructions + boardCanvas.Render()
+	return renderInstructions(b.GetTurn()) + boardCanvas.Render()
 }

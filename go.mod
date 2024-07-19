@@ -3,7 +3,7 @@ module github.com/ZongBen/GoFive
 go 1.22.5
 
 require (
-	github.com/ZongBen/tanvas v0.0.0-20240718152844-e97dbed68312
+	github.com/ZongBen/tanvas v0.0.0-20240719082138-1ffdce7b9f40
 	github.com/eiannone/keyboard v0.0.0-20220611211555-0d226195f203
 )
 
