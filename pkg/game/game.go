@@ -121,7 +121,7 @@ func (b *board) CheckWin() {
 func checkRight(b *board, x, y int) bool {
 	state := b.point[y][x].State
 	for i := 1; i < 5; i++ {
-		if x+i > b.max_x {
+		if x+i > b.max_x-1 {
 			return false
 		}
 		if b.point[y][x+i].State != state {
@@ -134,7 +134,7 @@ func checkRight(b *board, x, y int) bool {
 func checkDown(b *board, x, y int) bool {
 	state := b.point[y][x].State
 	for i := 1; i < 5; i++ {
-		if y+i > b.max_y {
+		if y+i > b.max_y-1 {
 			return false
 		}
 		if b.point[y+i][x].State != state {
@@ -147,7 +147,7 @@ func checkDown(b *board, x, y int) bool {
 func checkRightDown(b *board, x, y int) bool {
 	state := b.point[y][x].State
 	for i := 1; i < 5; i++ {
-		if x+i > b.max_x || y+i > b.max_y {
+		if x+i > b.max_x-1 || y+i > b.max_y-1 {
 			return false
 		}
 		if b.point[y+i][x+i].State != state {
@@ -160,7 +160,7 @@ func checkRightDown(b *board, x, y int) bool {
 func checkLeftDown(b *board, x, y int) bool {
 	state := b.point[y][x].State
 	for i := 1; i < 5; i++ {
-		if x-i < 0 || y+i > b.max_y {
+		if x-i < 0 || y+i > b.max_y-1 {
 			return false
 		}
 		if b.point[y+i][x-i].State != state {

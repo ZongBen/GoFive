@@ -29,6 +29,7 @@ func main() {
 	}
 	gui.Clear()
 	gui.Close()
+	gui.Sync()
 }
 
 func StartLocalGame() {
