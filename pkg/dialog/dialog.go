@@ -5,7 +5,7 @@ const (
 	QUIT
 )
 
-type IDialog interface {
+type Dialog interface {
 	GetState() int
 	SetState(int)
 }

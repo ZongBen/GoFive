@@ -8,11 +8,15 @@ import (
 	"github.com/ZongBen/GoFive/pkg/menu"
 )
 
-var _homeMenu menu.IHomeMenu
+var _homeMenu menu.HomeMenu
+var _onlineMenu menu.OnlineMenu
 
 func init() {
 	homeMenu := menu.CreateHomeMenu()
 	_homeMenu = &homeMenu
+
+	onlineMenu := menu.CreateOnlineMenu()
+	_onlineMenu = &onlineMenu
 }
 
 func main() {
@@ -20,15 +24,32 @@ func main() {
 		gui.Flush(34, 20, gui.RenderHome(_homeMenu), true)
 		command := control.ExecuteCommand(_homeMenu, control.HomeMenuCommandHandler)
 		switch command {
-		case control.LOCAL_GAME:
+		case menu.LOCAL_PLAY:
 			StartLocalGame()
-		case control.ONLINE_GAME:
-		case control.EXIT:
+		case menu.ONLINE_PLAY:
+			OnlineGameMenu()
+		case menu.EXIT:
 			_homeMenu.Quit()
 		}
 	}
 	gui.Clear()
 	gui.Close()
+}
+
+func OnlineGameMenu() {
+	gui.Clear()
+	state := -1
+	for state == -1 {
+		gui.Flush(34, 20, gui.RenderOnline(_onlineMenu), true)
+		state = control.ExecuteCommand(_onlineMenu, control.OnlineMenuCommandHandler)
+		switch state {
+		case menu.HOST:
+		case menu.JOIN:
+		case menu.ONLINE_BACK:
+			_onlineMenu.SetMenuSelect(menu.JOIN)
+			break
+		}
+	}
 }
 
 func StartLocalGame() {

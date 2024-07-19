@@ -4,14 +4,7 @@ import (
 	"github.com/ZongBen/GoFive/pkg/menu"
 )
 
-const (
-	NOTHING = iota
-	LOCAL_GAME
-	ONLINE_GAME
-	EXIT
-)
-
-func HomeMenuCommandHandler(m menu.IHomeMenu, key rune) int {
+func HomeMenuCommandHandler(m menu.HomeMenu, key rune) int {
 	selector := m.GetMenuSelect()
 	switch key {
 	case 'w':
@@ -29,13 +22,13 @@ func HomeMenuCommandHandler(m menu.IHomeMenu, key rune) int {
 	case 'e':
 		switch selector {
 		case 0:
-			return LOCAL_GAME
+			return menu.LOCAL_PLAY
 		case 1:
-			return ONLINE_GAME
+			return menu.ONLINE_PLAY
 		case 2:
-			return EXIT
+			return menu.EXIT
 		}
 	}
 	m.SetMenuSelect(selector)
-	return 0
+	return -1
 }

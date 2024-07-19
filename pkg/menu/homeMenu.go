@@ -6,7 +6,7 @@ const (
 	EXIT
 )
 
-type IHomeMenu interface {
+type HomeMenu interface {
 	GetMenuSelect() int
 	SetMenuSelect(int)
 	Quit() bool

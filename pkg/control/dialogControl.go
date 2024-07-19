@@ -4,7 +4,7 @@ import (
 	"github.com/ZongBen/GoFive/pkg/dialog"
 )
 
-func DialogCommandHandler(d dialog.IDialog, key rune) int {
+func DialogCommandHandler(d dialog.Dialog, key rune) int {
 	state := d.GetState()
 	if key == 'a' || key == 'd' {
 		if state == dialog.AGAIN {

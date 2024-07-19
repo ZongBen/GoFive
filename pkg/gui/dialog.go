@@ -5,7 +5,7 @@ import (
 	"github.com/ZongBen/tanvas"
 )
 
-func renderDialog(d dialog.IDialog, winner int, s tanvas.Section) {
+func renderDialog(d dialog.Dialog, winner int, s tanvas.Section) {
 	turn := ""
 	if winner == 1 {
 		turn = "Black"

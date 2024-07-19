@@ -22,7 +22,7 @@ type Board interface {
 	CheckWin()
 	GetTurn() bool
 	GetWinner() int
-	GetDialog() dialog.IDialog
+	GetDialog() dialog.Dialog
 }
 
 type board struct {
@@ -33,7 +33,7 @@ type board struct {
 	selectorPosition [2]int
 	finish           bool
 	winner           int
-	dialog           dialog.IDialog
+	dialog           dialog.Dialog
 }
 
 type piece struct {
@@ -44,7 +44,7 @@ func (b *board) GetWinner() int {
 	return b.winner
 }
 
-func (b *board) GetDialog() dialog.IDialog {
+func (b *board) GetDialog() dialog.Dialog {
 	return b.dialog
 }
 

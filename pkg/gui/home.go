@@ -23,8 +23,15 @@ func init() {
 	title = renderTitle()
 }
 
-func RenderHome(homeMenu menu.IHomeMenu) string {
-	result := renderTitle() + renderMenu(homeMenu)
+func RenderHome(homeMenu menu.HomeMenu) string {
+	_menuSection.Clear()
+	result := title + renderHomeMenu(homeMenu)
+	return result
+}
+
+func RenderOnline(onlineMenu menu.OnlineMenu) string {
+	_menuSection.Clear()
+	result := title + renderOnlineMenu(onlineMenu)
 	return result
 }
 
@@ -50,12 +57,30 @@ func renderTitle() string {
 	return titleCanvas.Project()
 }
 
-func renderMenu(m menu.IHomeMenu) string {
+func renderHomeMenu(m menu.HomeMenu) string {
 	menu :=
 		`
   1. Local  Game
   2. Online Game
   3. Exit       `
+	lines := strings.Split(menu, "\n")
+	for i, line := range lines {
+		if i == m.GetMenuSelect()+1 {
+			line += " <=="
+		} else {
+			line += "    "
+		}
+		_menuSection.SetRow(0, i, line)
+	}
+	return _menuCanvas.Project()
+}
+
+func renderOnlineMenu(m menu.OnlineMenu) string {
+	menu :=
+		`
+  1. Join Game
+  2. Host Game
+  3. Back     `
 	lines := strings.Split(menu, "\n")
 	for i, line := range lines {
 		if i == m.GetMenuSelect()+1 {
