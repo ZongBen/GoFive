@@ -19,7 +19,7 @@ func init() {
 	c := tanvas.CreateCanvas(18*7, 18*3, 3)
 	boardCanvas = &c
 
-	d := c.CreateSection(45, 18, 34, 8, 2)
+	d := c.CreateSection(47, 18, 34, 8, 2)
 	d.SetDisplay(false)
 	dialogSection = &d
 
