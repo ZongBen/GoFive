@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/ZongBen/GoFive/pkg/control"
 	"github.com/ZongBen/GoFive/pkg/dialog"
 	"github.com/ZongBen/GoFive/pkg/game"
@@ -19,14 +17,12 @@ func init() {
 
 func main() {
 	for !_homeMenu.IsQuit() {
-		gui.Clear()
-		fmt.Println(gui.RenderHome(_homeMenu))
+		gui.Flush(gui.RenderHome(_homeMenu))
 		command := control.ExecuteCommand(_homeMenu, control.HomeMenuCommandHandler)
 		switch command {
 		case control.LOCAL_GAME:
 			StartLocalGame()
 		case control.ONLINE_GAME:
-			fmt.Println("Online Game")
 		case control.EXIT:
 			_homeMenu.Quit()
 		}
@@ -42,14 +38,14 @@ func StartLocalGame() {
 			result := showDialog(_gameBoard)
 			if result == dialog.AGAIN {
 				StartLocalGame()
+				gui.Clear()
 				break
 			} else if result == dialog.QUIT {
 				_gameBoard.Quit()
 				break
 			}
 		}
-		gui.Clear()
-		fmt.Print(gui.RenderBoard(_gameBoard))
+		gui.Flush(gui.RenderBoard(_gameBoard))
 		control.ExecuteCommand(_gameBoard, control.GameCommandHandler)
 	}
 }
@@ -57,8 +53,7 @@ func StartLocalGame() {
 func showDialog(b game.Board) int {
 	state := -1
 	for state == -1 {
-		gui.Clear()
-		fmt.Print(gui.RenderBoard(b))
+		gui.Flush(gui.RenderBoard(b))
 		state = control.ExecuteCommand(b.GetDialog(), control.DialogCommandHandler)
 	}
 	return state

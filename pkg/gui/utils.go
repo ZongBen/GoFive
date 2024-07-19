@@ -1,32 +1,34 @@
 package gui
 
 import (
-	"os"
-	"os/exec"
-	"runtime"
+	"strings"
+	"sync"
+
+	"github.com/nsf/termbox-go"
 )
 
-var clear map[string]func() //create a map for storing clear funcs
-
 func init() {
-	clear = make(map[string]func()) //Initialize it
-	clear["linux"] = func() {
-		cmd := exec.Command("clear") //Linux example, its tested
-		cmd.Stdout = os.Stdout
-		cmd.Run()
-	}
-	clear["windows"] = func() {
-		cmd := exec.Command("cmd", "/c", "cls") //Windows example, its tested
-		cmd.Stdout = os.Stdout
-		cmd.Run()
+	if !termbox.IsInit {
+		termbox.Init()
 	}
 }
 
-func Clear() {
-	value, ok := clear[runtime.GOOS] //runtime.GOOS -> linux, windows, darwin etc.
-	if ok {                          //if we defined a clear func for that platform:
-		value() //we execute it
-	} else { //unsupported platform
-		panic("Your platform is unsupported! I can't clear terminal screen :(")
+func Flush(content string) {
+	wg := new(sync.WaitGroup)
+	lines := strings.Split(content, "\n")
+	for y, line := range lines {
+		wg.Add(1)
+		go func(y int, line string) {
+			for x, char := range line {
+				termbox.SetChar(x, y, char)
+			}
+			wg.Done()
+		}(y, line)
 	}
+	wg.Wait()
+	termbox.Flush()
+}
+
+func Clear() {
+	termbox.Clear(termbox.ColorDefault, termbox.ColorDefault)
 }
