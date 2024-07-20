@@ -2,17 +2,18 @@ package control
 
 import (
 	"github.com/ZongBen/GoFive/pkg/dialog"
+	"github.com/eiannone/keyboard"
 )
 
-func DialogCommandHandler(d dialog.Dialog, key rune) int {
+func DialogCommandHandler(d dialog.Dialog, char rune, key keyboard.Key) int {
 	state := d.GetState()
-	if key == 'a' || key == 'd' {
+	if char == 'a' || char == 'd' {
 		if state == dialog.AGAIN {
 			d.SetState(dialog.QUIT)
 		} else {
 			d.SetState(dialog.AGAIN)
 		}
-	} else if key == 'e' {
+	} else if char == 'e' {
 		return state
 	}
 	return -1

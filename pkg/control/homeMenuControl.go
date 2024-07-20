@@ -2,11 +2,12 @@ package control
 
 import (
 	"github.com/ZongBen/GoFive/pkg/menu"
+	"github.com/eiannone/keyboard"
 )
 
-func HomeMenuCommandHandler(m menu.HomeMenu, key rune) int {
+func HomeMenuCommandHandler(m menu.HomeMenu, char rune, key keyboard.Key) int {
 	selector := m.GetMenuSelect()
-	switch key {
+	switch char {
 	case 'w':
 		if selector > 0 {
 			selector--

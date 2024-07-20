@@ -1,10 +1,13 @@
 package control
 
-import "github.com/ZongBen/GoFive/pkg/game"
+import (
+	"github.com/ZongBen/GoFive/pkg/game"
+	"github.com/eiannone/keyboard"
+)
 
-func GameCommandHandler(b game.Board, key rune) int {
+func GameCommandHandler(b game.Board, char rune, key keyboard.Key) int {
 	x, y := b.GetSelectorPosition()
-	switch key {
+	switch char {
 	case 'w':
 		if y > 0 {
 			y--

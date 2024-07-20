@@ -2,11 +2,12 @@ package control
 
 import (
 	"github.com/ZongBen/GoFive/pkg/menu"
+	"github.com/eiannone/keyboard"
 )
 
-func OnlineMenuCommandHandler(o menu.OnlineMenu, key rune) int {
+func OnlineMenuCommandHandler(o menu.OnlineMenu, char rune, key keyboard.Key) int {
 	selector := o.GetMenuSelect()
-	switch key {
+	switch char {
 	case 'w':
 		if selector > 0 {
 			selector--

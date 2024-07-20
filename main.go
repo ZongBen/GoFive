@@ -43,12 +43,25 @@ func OnlineGameMenu() {
 		gui.Flush(34, 20, gui.RenderOnline(_onlineMenu), true)
 		state = control.ExecuteCommand(_onlineMenu, control.OnlineMenuCommandHandler)
 		switch state {
-		case menu.HOST:
 		case menu.JOIN:
+			JoinGame()
+		case menu.HOST:
 		case menu.ONLINE_BACK:
 			_onlineMenu.SetMenuSelect(menu.JOIN)
 			break
 		}
+	}
+}
+
+func JoinGame() {
+	var ip string
+	state := -1
+	for state == -1 {
+		gui.Flush(34, 20, gui.RenderJoinGame(ip), true)
+		state = control.ExecuteCommand(&ip, control.JoinGameCommandHandler)
+	}
+	if state == control.ESC {
+		OnlineGameMenu()
 	}
 }
 
