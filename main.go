@@ -6,6 +6,7 @@ import (
 	"github.com/ZongBen/GoFive/pkg/game"
 	"github.com/ZongBen/GoFive/pkg/gui"
 	"github.com/ZongBen/GoFive/pkg/menu"
+	"github.com/ZongBen/GoFive/pkg/online"
 )
 
 var _homeMenu menu.HomeMenu
@@ -46,6 +47,7 @@ func OnlineGameMenu() {
 		case menu.JOIN:
 			JoinGame()
 		case menu.HOST:
+			online.StartWebsocketServer()
 		case menu.ONLINE_BACK:
 			_onlineMenu.SetMenuSelect(menu.JOIN)
 			break
@@ -62,6 +64,8 @@ func JoinGame() {
 	}
 	if state == control.ESC {
 		OnlineGameMenu()
+	} else if state == control.ENTER_IP {
+		online.ConnectToHost()
 	}
 }
 
