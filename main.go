@@ -95,7 +95,7 @@ func JoinGame() {
 	if state == control.ESC {
 		OnlineGameMenu()
 	} else if state == control.ENTER_IP {
-		online.ConnectToHost()
+		online.ConnectToHost(ip)
 	}
 }
 

@@ -2,47 +2,33 @@ package online
 
 import (
 	"fmt"
-	"os"
 
+	"github.com/ZongBen/GoFive/pkg/control"
+	"github.com/ZongBen/GoFive/pkg/game"
 	"github.com/ZongBen/GoFive/pkg/gui"
 	"github.com/gorilla/websocket"
 )
 
-var done chan interface{}
-var interrupt chan os.Signal
-
-func receiveHandler(connection *websocket.Conn) {
-	defer close(done)
-	for {
-		_, msg, _ := connection.ReadMessage()
-		fmt.Printf("Received: %s\n", msg)
-	}
-}
-
-func ConnectToHost() {
-	connection, _, err := websocket.DefaultDialer.Dial("ws://localhost:5555/ws", nil)
+func ConnectToHost(ip string) {
+	url := "ws://" + ip + ":5555/ws"
+	connection, _, err := websocket.DefaultDialer.Dial(url, nil)
 	if err != nil {
 		fmt.Println("Error during connection:", err)
 		return
 	}
 	defer connection.Close()
 
-	// done = make(chan interface{})
-	// go receiveHandler(connection)
-
+	b := game.CreateBoard()
+	var _gameBoard game.Board = &b
+	gui.Flush(126, 60, gui.RenderBoard(_gameBoard), true)
 	for {
-		_, msg, _ := connection.ReadMessage()
-		gui.Flush(34, 20, string(msg), true)
-
-		// select {
-		// case <-time.After(1 * time.Second):
-		// 	err := connection.WriteMessage(websocket.TextMessage, []byte("Hello from client"))
-		// 	if err != nil {
-		// 		fmt.Println("Error during message sending:", err)
-		// 		return
-		// 	}
-		// case <-done:
-		// 	return
-		// }
+		if b.GetTurn() == false {
+			input := control.ExecuteCommand(_gameBoard, control.GameCommandHandler)
+			connection.WriteMessage(websocket.TextMessage, []byte(string(input)))
+		} else {
+			_, message, _ := connection.ReadMessage()
+			control.GameCommandHandler(_gameBoard, rune(message[0]), 0)
+		}
+		gui.Flush(126, 60, gui.RenderBoard(_gameBoard), true)
 	}
 }

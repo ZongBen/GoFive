@@ -5,7 +5,7 @@ import (
 	"github.com/eiannone/keyboard"
 )
 
-func GameCommandHandler(b game.Board, char rune, key keyboard.Key) int {
+func GameCommandHandler(b game.Board, char rune, key keyboard.Key) rune {
 	x, y := b.GetSelectorPosition()
 	switch char {
 	case 'w':
@@ -35,5 +35,5 @@ func GameCommandHandler(b game.Board, char rune, key keyboard.Key) int {
 		b.Quit()
 	}
 	b.SetSelectorPosition(x, y)
-	return 0
+	return char
 }
