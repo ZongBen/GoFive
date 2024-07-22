@@ -1,11 +1,9 @@
 package online
 
 import (
-	"encoding/json"
 	"fmt"
 	"os"
 
-	"github.com/ZongBen/GoFive/pkg/game"
 	"github.com/ZongBen/GoFive/pkg/gui"
 	"github.com/gorilla/websocket"
 )
@@ -29,16 +27,12 @@ func ConnectToHost() {
 	}
 	defer connection.Close()
 
-	done = make(chan interface{})
-	go receiveHandler(connection)
-
-	var b game.Board
+	// done = make(chan interface{})
+	// go receiveHandler(connection)
 
 	for {
 		_, msg, _ := connection.ReadMessage()
-		fmt.Println("Received: ", string(msg))
-		json.Unmarshal(msg, &b)
-		gui.Flush(34, 20, gui.RenderBoard(b), true)
+		gui.Flush(34, 20, string(msg), true)
 
 		// select {
 		// case <-time.After(1 * time.Second):

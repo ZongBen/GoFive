@@ -1,6 +1,7 @@
 package main
 
 import (
+	"sync"
 	"time"
 
 	"github.com/ZongBen/GoFive/pkg/control"
@@ -59,31 +60,28 @@ func OnlineGameMenu() {
 }
 
 func WaitHostGame() {
-	ch := make(chan int)
-	go online.StartHostServer(ch)
-	go renderWaiting(ch)
-	waitCommand(ch)
+	state := -1
+	ch := make(chan int, 1)
+	ws := new(sync.WaitGroup)
+	go online.StartHostServer(&state, ch, ws)
+	go renderWaiting(&state)
+	waitCommand(&state, ch)
+	ws.Wait()
 }
 
-func renderWaiting(ch <-chan int) {
+func renderWaiting(state *int) {
 	dot := 0
-	for {
-		select {
-		case _, ok := <-ch:
-			if !ok {
-				return
-			}
-		case <-time.After(1 * time.Second):
-			dot = (dot + 1) % 4
-			gui.Flush(34, 20, gui.RenderHostGame(dot), true)
-		}
+	for *state == -1 {
+		dot = (dot + 1) % 4
+		gui.Flush(34, 20, gui.RenderHostGame(dot), true)
+		<-time.After(1 * time.Second)
 	}
 }
 
-func waitCommand(ch chan int) {
-	state := -1
-	for state == -1 {
-		state = control.ExecuteCommand(ch, control.HostGameCommandHandler)
+func waitCommand(state *int, ch chan int) {
+	input := control.Input{State: state, Ch: ch}
+	for *state == -1 {
+		control.ExecuteCommand(input, control.HostGameCommandHandler)
 	}
 }
 

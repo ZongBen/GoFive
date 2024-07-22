@@ -8,17 +8,17 @@ const (
 	CANCEL_HOST = iota
 )
 
-func HostGameCommandHandler(ch chan int, _ rune, key keyboard.Key) int {
-	_, ok := <-ch
+type Input struct {
+	State *int
+	Ch    chan int
+}
+
+func HostGameCommandHandler(state Input, _ rune, key keyboard.Key) int {
 	switch key {
 	case keyboard.KeyEsc:
-		if ok {
-			close(ch)
-		}
+		*state.State = CANCEL_HOST
+		state.Ch <- CANCEL_HOST
 		return CANCEL_HOST
-	}
-	if !ok {
-		return 0
 	}
 	return -1
 }

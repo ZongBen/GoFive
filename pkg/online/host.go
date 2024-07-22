@@ -3,6 +3,7 @@ package online
 import (
 	"fmt"
 	"net/http"
+	"sync"
 
 	"github.com/ZongBen/GoFive/pkg/game"
 	"github.com/ZongBen/GoFive/pkg/gui"
@@ -11,7 +12,8 @@ import (
 
 var (
 	upgrader = websocket.Upgrader{}
-	hostCH   chan<- int
+	s        *int
+	_ws      *sync.WaitGroup
 )
 
 func init() {
@@ -19,19 +21,21 @@ func init() {
 }
 
 func startGame(conn *websocket.Conn) {
+	ch := make(chan rune)
 	b := game.CreateBoard()
 	var board game.Board = &b
 	json := gui.RenderBoard(board)
-	fmt.Println("Sending: ", json)
 	for {
-		_ = conn.WriteMessage(websocket.TextMessage, []byte(json))
+		gui.Flush(34, 20, json, true)
+		conn.WriteMessage(websocket.TextMessage, []byte(json))
 		_, message, _ := conn.ReadMessage()
-		fmt.Println("Received: ", message)
+		ch <- rune(message[0])
 	}
 }
 
 func socketHandler(w http.ResponseWriter, r *http.Request) {
-
+	_ws.Add(1)
+	*s = 0
 	// Upgrade our raw HTTP connection to a websocket based one
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
@@ -39,6 +43,7 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer conn.Close()
+	defer _ws.Done()
 
 	startGame(conn)
 
@@ -59,16 +64,11 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 	// }
 }
 
-func StartHostServer(ch chan int) {
-	hostCH = ch
+func StartHostServer(state *int, ch chan int, ws *sync.WaitGroup) {
+	s = state
+	_ws = ws
 	server := http.Server{Addr: ":5555"}
-
-	go func() {
-		server.ListenAndServe()
-	}()
-
-	_, ok := <-ch
-	if !ok {
-		server.Close()
-	}
+	server.ListenAndServe()
+	*state = <-ch
+	server.Close()
 }
