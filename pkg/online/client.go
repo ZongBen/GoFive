@@ -1,10 +1,12 @@
 package online
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
-	"time"
 
+	"github.com/ZongBen/GoFive/pkg/game"
+	"github.com/ZongBen/GoFive/pkg/gui"
 	"github.com/gorilla/websocket"
 )
 
@@ -14,11 +16,7 @@ var interrupt chan os.Signal
 func receiveHandler(connection *websocket.Conn) {
 	defer close(done)
 	for {
-		_, msg, err := connection.ReadMessage()
-		if err != nil {
-			fmt.Println("Error in receive:", err)
-			return
-		}
+		_, msg, _ := connection.ReadMessage()
 		fmt.Printf("Received: %s\n", msg)
 	}
 }
@@ -34,16 +32,23 @@ func ConnectToHost() {
 	done = make(chan interface{})
 	go receiveHandler(connection)
 
+	var b game.Board
+
 	for {
-		select {
-		case <-time.After(1 * time.Second):
-			err := connection.WriteMessage(websocket.TextMessage, []byte("Hello from client"))
-			if err != nil {
-				fmt.Println("Error during message sending:", err)
-				return
-			}
-		case <-done:
-			return
-		}
+		_, msg, _ := connection.ReadMessage()
+		fmt.Println("Received: ", string(msg))
+		json.Unmarshal(msg, &b)
+		gui.Flush(34, 20, gui.RenderBoard(b), true)
+
+		// select {
+		// case <-time.After(1 * time.Second):
+		// 	err := connection.WriteMessage(websocket.TextMessage, []byte("Hello from client"))
+		// 	if err != nil {
+		// 		fmt.Println("Error during message sending:", err)
+		// 		return
+		// 	}
+		// case <-done:
+		// 	return
+		// }
 	}
 }

@@ -1,6 +1,8 @@
 package main
 
 import (
+	"time"
+
 	"github.com/ZongBen/GoFive/pkg/control"
 	"github.com/ZongBen/GoFive/pkg/dialog"
 	"github.com/ZongBen/GoFive/pkg/game"
@@ -47,11 +49,41 @@ func OnlineGameMenu() {
 		case menu.JOIN:
 			JoinGame()
 		case menu.HOST:
-			online.StartWebsocketServer()
+			WaitHostGame()
+			break
 		case menu.ONLINE_BACK:
 			_onlineMenu.SetMenuSelect(menu.JOIN)
 			break
 		}
+	}
+}
+
+func WaitHostGame() {
+	ch := make(chan int)
+	go online.StartHostServer(ch)
+	go renderWaiting(ch)
+	waitCommand(ch)
+}
+
+func renderWaiting(ch <-chan int) {
+	dot := 0
+	for {
+		select {
+		case _, ok := <-ch:
+			if !ok {
+				return
+			}
+		case <-time.After(1 * time.Second):
+			dot = (dot + 1) % 4
+			gui.Flush(34, 20, gui.RenderHostGame(dot), true)
+		}
+	}
+}
+
+func waitCommand(ch chan int) {
+	state := -1
+	for state == -1 {
+		state = control.ExecuteCommand(ch, control.HostGameCommandHandler)
 	}
 }
 

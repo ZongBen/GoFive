@@ -1,16 +1,19 @@
 package gui
 
 import (
+	"net"
 	"strings"
 
 	"github.com/ZongBen/GoFive/pkg/menu"
 	"github.com/ZongBen/tanvas"
 )
 
-var _menuCanvas tanvas.Canvas
-var _menuSection tanvas.Section
-
-var _joinGameSection tanvas.Section
+var (
+	_menuCanvas      tanvas.Canvas
+	_menuSection     tanvas.Section
+	_joinGameSection tanvas.Section
+	_hostGameSection tanvas.Section
+)
 
 var title string
 
@@ -24,6 +27,9 @@ func init() {
 
 	joinGameSection := menuCanvas.CreateSection(2, 0, 35, 5, 0)
 	_joinGameSection = &joinGameSection
+
+	hostGameSection := menuCanvas.CreateSection(7, 0, 35, 5, 0)
+	_hostGameSection = &hostGameSection
 
 	title = renderTitle()
 }
@@ -43,6 +49,12 @@ func RenderOnline(onlineMenu menu.OnlineMenu) string {
 func RenderJoinGame(ip string) string {
 	_menuCanvas.Clear()
 	result := title + renderJoinGame(ip)
+	return result
+}
+
+func RenderHostGame(dot int) string {
+	_menuCanvas.Clear()
+	result := title + renderHostGame(dot)
 	return result
 }
 
@@ -110,4 +122,40 @@ func renderJoinGame(ip string) string {
 	_joinGameSection.SetRow(0, 1, menu)
 	_joinGameSection.SetRow(0, 2, input)
 	return _menuCanvas.Project()
+}
+
+func renderHostGame(dot int) string {
+	s_dot := ""
+	for i := 0; i < dot; i++ {
+		s_dot += "."
+	}
+	ipAddrs, _ := getLocalIPs()
+	var ip string
+	for _, ipAddr := range ipAddrs {
+		if strings.HasPrefix(ipAddr.String(), "192.168.") {
+			ip = ipAddr.String()
+			break
+		}
+	}
+	menu := "Waiting for connection" + s_dot
+	_hostGameSection.SetRow(0, 1, "Your IP: "+ip)
+	_hostGameSection.SetRow(0, 2, menu)
+	return _menuCanvas.Project()
+}
+
+func getLocalIPs() ([]net.IP, error) {
+	var ips []net.IP
+	addresses, err := net.InterfaceAddrs()
+	if err != nil {
+		return nil, err
+	}
+
+	for _, addr := range addresses {
+		if ipnet, ok := addr.(*net.IPNet); ok && !ipnet.IP.IsLoopback() {
+			if ipnet.IP.To4() != nil {
+				ips = append(ips, ipnet.IP)
+			}
+		}
+	}
+	return ips, nil
 }

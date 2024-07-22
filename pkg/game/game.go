@@ -1,6 +1,8 @@
 package game
 
-import "github.com/ZongBen/GoFive/pkg/dialog"
+import (
+	"github.com/ZongBen/GoFive/pkg/dialog"
+)
 
 const (
 	EMPTY = iota
