@@ -15,7 +15,7 @@ type dialog struct {
 }
 
 func CreateDialog() dialog {
-	return dialog{state: 0}
+	return dialog{state: AGAIN}
 }
 
 func (d *dialog) GetState() int {

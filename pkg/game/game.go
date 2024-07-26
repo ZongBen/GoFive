@@ -4,20 +4,14 @@ import (
 	"github.com/ZongBen/GoFive/pkg/dialog"
 )
 
-const (
-	EMPTY = iota
-	BLACK
-	WHITE
-)
-
 type Board interface {
 	GetWidth() int
 	GetHeight() int
 	GetSelectorPosition() (int, int)
 	SetSelectorPosition(x, y int)
 	SetPiece(x, y int, piece piece)
-	Quit()
 	GetPiece() piece
+	Quit()
 	IsFinish() bool
 	GetPoint(x, y int) piece
 	ChangeTurn()
@@ -36,10 +30,6 @@ type board struct {
 	finish           bool
 	winner           int
 	dialog           dialog.Dialog
-}
-
-type piece struct {
-	State int
 }
 
 func (b *board) GetWinner() int {
