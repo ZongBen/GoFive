@@ -8,3 +8,8 @@ func ExecuteCommand[Tin any, Tout any](t Tin, commandHandler func(Tin, rune, key
 	char, key, _ := keyboard.GetSingleKey()
 	return commandHandler(t, char, key)
 }
+
+func ReadCommand() (rune, keyboard.Key) {
+	char, key, _ := keyboard.GetSingleKey()
+	return char, key
+}
