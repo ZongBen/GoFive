@@ -19,14 +19,14 @@ func init() {
 	c := tanvas.CreateCanvas(18*7, 18*3, 3)
 	boardCanvas = &c
 
-	d := c.CreateSection(47, 18, 34, 8, 2)
+	d := c.CreateSection(47, 18, 34, 8, 3)
 	d.SetDisplay(false)
 	dialogSection = &d
 
 	instructionCanvas := tanvas.CreateCanvas(67, 5, 1)
 	_instructionCanvas = &instructionCanvas
 
-	instructionSection := instructionCanvas.CreateSection(0, 0, 67, 5, 0)
+	instructionSection := instructionCanvas.CreateSection(0, 0, 67, 5, 1)
 	_instructionSection = &instructionSection
 }
 
@@ -60,8 +60,8 @@ func RenderBoard(b game.Board) string {
 			for x := 0; x < b.GetWidth(); x++ {
 				wg.Add(1)
 				go func(x, y int) {
-					s := boardCanvas.CreateSection(x*7, y*3, 7, 3, 0)
-					s1 := boardCanvas.CreateSection(x*7, y*3, 7, 3, 1)
+					s := boardCanvas.CreateSection(x*7, y*3, 7, 3, 1)
+					s1 := boardCanvas.CreateSection(x*7, y*3, 7, 3, 2)
 
 					renderPiece(b.GetPoint(x, y).State, &s)
 

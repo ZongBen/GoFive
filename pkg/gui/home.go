@@ -22,13 +22,13 @@ func init() {
 	menuCanvas.SetOffset(0, 0)
 	_menuCanvas = &menuCanvas
 
-	menuSection := menuCanvas.CreateSection(7, 0, 35, 5, 0)
+	menuSection := menuCanvas.CreateSection(7, 0, 35, 5, 1)
 	_menuSection = &menuSection
 
-	joinGameSection := menuCanvas.CreateSection(2, 0, 35, 5, 0)
+	joinGameSection := menuCanvas.CreateSection(2, 0, 35, 5, 1)
 	_joinGameSection = &joinGameSection
 
-	hostGameSection := menuCanvas.CreateSection(7, 0, 35, 5, 0)
+	hostGameSection := menuCanvas.CreateSection(7, 0, 35, 5, 1)
 	_hostGameSection = &hostGameSection
 
 	title = renderTitle()
@@ -60,7 +60,7 @@ func RenderHostGame(dot int) string {
 
 func renderTitle() string {
 	titleCanvas := tanvas.CreateCanvas(35, 7, 1)
-	titleSection := titleCanvas.CreateSection(0, 0, 35, 7, 0)
+	titleSection := titleCanvas.CreateSection(0, 0, 35, 7, 1)
 	_titleSection := &titleSection
 
 	title :=
