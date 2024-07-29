@@ -9,51 +9,45 @@ import (
 )
 
 var (
-	_menuCanvas      tanvas.Canvas
-	_menuSection     tanvas.Section
-	_joinGameSection tanvas.Section
-	_hostGameSection tanvas.Section
+	menuCanvas      tanvas.Canvas
+	menuSection     tanvas.Section
+	joinGameSection tanvas.Section
+	hostGameSection tanvas.Section
 )
 
 var title string
 
 func init() {
-	menuCanvas := tanvas.CreateCanvas(50, 5, 1)
+	menuCanvas = tanvas.CreateCanvas(50, 5, 1)
 	menuCanvas.SetOffset(0, 0)
-	_menuCanvas = &menuCanvas
 
-	menuSection := menuCanvas.CreateSection(7, 0, 35, 5, 1)
-	_menuSection = &menuSection
-
-	joinGameSection := menuCanvas.CreateSection(2, 0, 35, 5, 1)
-	_joinGameSection = &joinGameSection
-
-	hostGameSection := menuCanvas.CreateSection(7, 0, 35, 5, 1)
-	_hostGameSection = &hostGameSection
+	menuSection = menuCanvas.CreateSection(7, 0, 35, 5, 1)
+	joinGameSection = menuCanvas.CreateSection(2, 0, 35, 5, 1)
+	hostGameSection = menuCanvas.CreateSection(7, 0, 35, 5, 1)
 
 	title = renderTitle()
 }
 
 func RenderHome(homeMenu menu.HomeMenu) string {
-	_menuCanvas.Clear()
+	menuCanvas.Clear()
 	result := title + renderHomeMenu(homeMenu)
 	return result
 }
 
 func RenderOnline(onlineMenu menu.OnlineMenu) string {
-	_menuCanvas.Clear()
+	menuCanvas.Clear()
 	result := title + renderOnlineMenu(onlineMenu)
 	return result
 }
 
 func RenderJoinGame(ip string) string {
-	_menuCanvas.Clear()
+	menuCanvas.Clear()
 	result := title + renderJoinGame(ip)
 	return result
 }
 
 func RenderHostGame(dot int) string {
-	_menuCanvas.Clear()
+	menuCanvas.Clear()
 	result := title + renderHostGame(dot)
 	return result
 }
@@ -61,7 +55,6 @@ func RenderHostGame(dot int) string {
 func renderTitle() string {
 	titleCanvas := tanvas.CreateCanvas(35, 7, 1)
 	titleSection := titleCanvas.CreateSection(0, 0, 35, 7, 1)
-	_titleSection := &titleSection
 
 	title :=
 		`
@@ -75,7 +68,7 @@ func renderTitle() string {
 	title = strings.Trim(title, "\n")
 	lines := strings.Split(title, "\n")
 	for i, line := range lines {
-		_titleSection.SetRow(0, i, line)
+		titleSection.SetRow(0, i, line)
 	}
 	return titleCanvas.Project()
 }
@@ -93,9 +86,9 @@ func renderHomeMenu(m menu.HomeMenu) string {
 		} else {
 			line += "    "
 		}
-		_menuSection.SetRow(0, i, line)
+		menuSection.SetRow(0, i, line)
 	}
-	return _menuCanvas.Project()
+	return menuCanvas.Project()
 }
 
 func renderOnlineMenu(m menu.OnlineMenu) string {
@@ -111,17 +104,17 @@ func renderOnlineMenu(m menu.OnlineMenu) string {
 		} else {
 			line += "    "
 		}
-		_menuSection.SetRow(0, i, line)
+		menuSection.SetRow(0, i, line)
 	}
-	return _menuCanvas.Project()
+	return menuCanvas.Project()
 }
 
 func renderJoinGame(ip string) string {
 	menu := "Enter the IP address of the host"
 	input := "IP: " + ip
-	_joinGameSection.SetRow(0, 1, menu)
-	_joinGameSection.SetRow(0, 2, input)
-	return _menuCanvas.Project()
+	joinGameSection.SetRow(0, 1, menu)
+	joinGameSection.SetRow(0, 2, input)
+	return menuCanvas.Project()
 }
 
 func renderHostGame(dot int) string {
@@ -138,9 +131,9 @@ func renderHostGame(dot int) string {
 		}
 	}
 	menu := "Waiting for connection" + s_dot
-	_hostGameSection.SetRow(0, 1, "Your IP: "+ip)
-	_hostGameSection.SetRow(0, 2, menu)
-	return _menuCanvas.Project()
+	hostGameSection.SetRow(0, 1, "Your IP: "+ip)
+	hostGameSection.SetRow(0, 2, menu)
+	return menuCanvas.Project()
 }
 
 func getLocalIPs() ([]net.IP, error) {

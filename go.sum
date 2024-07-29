@@ -22,6 +22,8 @@ github.com/ZongBen/tanvas v0.0.0-20240719130847-7f0237f834e3 h1:WZyvzqceWRV67db8
 github.com/ZongBen/tanvas v0.0.0-20240719130847-7f0237f834e3/go.mod h1:csu4FwRoy9Z5yeFK0jqX/EuOwUqAnQHhLOCr9/42Oco=
 github.com/ZongBen/tanvas v0.0.0-20240726112223-315943abe2a3 h1:lBHYjNqpJBIiHSAWqO9m5uhyxFoKTOharaqG3Kh2iCI=
 github.com/ZongBen/tanvas v0.0.0-20240726112223-315943abe2a3/go.mod h1:csu4FwRoy9Z5yeFK0jqX/EuOwUqAnQHhLOCr9/42Oco=
+github.com/ZongBen/tanvas v0.0.0-20240729081723-989320755899 h1:nRPHmh5ap2hcs2maUHpdFOZ7Qfoce5Ao2VCuo0ZX3I4=
+github.com/ZongBen/tanvas v0.0.0-20240729081723-989320755899/go.mod h1:csu4FwRoy9Z5yeFK0jqX/EuOwUqAnQHhLOCr9/42Oco=
 github.com/eiannone/keyboard v0.0.0-20220611211555-0d226195f203 h1:XBBHcIb256gUJtLmY22n99HaZTz+r2Z51xUPi01m3wg=
 github.com/eiannone/keyboard v0.0.0-20220611211555-0d226195f203/go.mod h1:E1jcSv8FaEny+OP/5k9UxZVw9YFWGj7eI4KR/iOBqCg=
 github.com/gorilla/websocket v1.5.3 h1:saDtZ6Pbx/0u+bgYQ3q96pZgCzfhKXGPqt7kZ72aNNg=

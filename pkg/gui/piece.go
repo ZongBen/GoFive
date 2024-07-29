@@ -5,14 +5,14 @@ import (
 	"github.com/ZongBen/tanvas"
 )
 
-func renderPiece(piece int, s tanvas.Section) {
+func renderPiece(piece int, s *tanvas.Section) {
 	switch piece {
 	case game.EMPTY:
-		renderEmpty(s)
+		renderEmpty(*s)
 	case game.BLACK:
-		renderBlack(s)
+		renderBlack(*s)
 	case game.WHITE:
-		renderWhite(s)
+		renderWhite(*s)
 	}
 }
 
